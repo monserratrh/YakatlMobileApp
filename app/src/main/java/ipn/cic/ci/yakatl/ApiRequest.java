@@ -22,22 +22,24 @@ public class ApiRequest {
     public static String consumirAPiSelectAll(){
 
 
-        MediaType mediaType = MediaType.parse("application/json");
+        MediaType mediaType = MediaType.parse("application/octet-stream");
+        RequestBody body = RequestBody.create(mediaType, "{\n    \"card\":{\n      \"card_number\":\"4111111111111111\",\n      \"holder_name\":\"Juan Perez Ramirez\",\n      \"expiration_year\":\"20\",\n      \"expiration_month\":\"12\",\n      \"cvv2\":\"110\"\n    },\n    \"plan_id\":\"pzxtp8o88pipie9tfmps\"\n}");
         Request request = new Request.Builder()
                 .url("http://localhost/MonitoreoContaminantesCIC-Yakatl/webservice/obtener_imecas.php?numeroSensor=-1&numeroElementos=-1&ordenamiento=mayor&filtro=")
                 .get()
-                .addHeader("authorization", "Basic c2tfNzUwNmI4MTgzYmMzNGUwMzhlZTllODQ5ZTJlNTI5OTQ6Og==")
-                .addHeader("content-type", "application/json")
                 .addHeader("cache-control", "no-cache")
-                .addHeader("postman-token", "b19eab66-f5c8-6695-2ad5-fe5641d89ec5")
+                .addHeader("postman-token", "a7ea2fb0-a2a4-9eda-a9db-a74d300c67c2")
                 .build();
 
 
-
-        try {
+       /* try {
 
             JSONObject response = new RequesApi().execute(request).get();
-            JSONObject jsonObject = new JSONObject(response.getString("retorno"));
+            //String retorno = response.getString("retorno");
+
+             JSONObject jsonObject = new JSONObject(response.getString("retorno"));
+
+            String id_wasp =     jsonObject.getString("id");
 
 
             return new String();
@@ -49,7 +51,7 @@ public class ApiRequest {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+*/
         return new String();
 
     }
