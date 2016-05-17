@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -33,11 +34,11 @@ public class MainActivity extends AppCompatActivity {
                         sensor1.get(i).getTimestamp()
                 };
 
+                Toast.makeText(this,arreglo[0], Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,arreglo[1], Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,arreglo[2], Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,arreglo[3], Toast.LENGTH_SHORT).show();
 
-                System.out.println(arreglo[0]);
-                System.out.println(arreglo[1]);
-                System.out.println(arreglo[2]);
-                System.out.println(arreglo[3]);
                 break;
             }
 
