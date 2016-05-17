@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -19,8 +21,27 @@ public class MainActivity extends AppCompatActivity {
         setupToolbar();
 
         // Mandar a llamar el api ejemplo
-        ApiRequest.consumirAPiSelectAll();
-    }
+        List<Sensor> sensor1 = RestApi.consultarWebServiceSensor(1,0);
+        List<Sensor> sensor2 = RestApi.consultarWebServiceSensor(2,0);
+        List<Sensor> sensor3 = RestApi.consultarWebServiceSensor(2,0);
+
+        for(int i = 0; i< sensor1.size(); i++) {
+                String[] arreglo = {
+                        sensor1.get(i).getId_wasp(),
+                        sensor1.get(i).getSensor(),
+                        sensor1.get(i).getValue(),
+                        sensor1.get(i).getTimestamp()
+                };
+
+
+                System.out.println(arreglo[0]);
+                System.out.println(arreglo[1]);
+                System.out.println(arreglo[2]);
+                System.out.println(arreglo[3]);
+                break;
+            }
+
+        }
 
     private void setupToolbar()
     {
