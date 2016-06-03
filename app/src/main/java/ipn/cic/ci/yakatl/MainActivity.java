@@ -19,7 +19,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setupToolbar();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
 
         // Mandar a llamar el api ejemplo
         List<Sensor> sensor1 = RestApi.consultarWebServiceSensor(1,0);
@@ -44,17 +45,24 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-    private void setupToolbar()
-    {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
+                Toast.makeText(getApplicationContext(), "REFRESH", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_share_fb:
+                Toast.makeText(getApplicationContext(), "SHARE ON FB", Toast.LENGTH_SHORT).show();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 
