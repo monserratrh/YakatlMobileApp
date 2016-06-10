@@ -27,9 +27,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
     public void consultarSensores() {
-        TextView sensores = (TextView) findViewById(R.id.nivelSensores);
-        String aux = "\n" +String.valueOf(leerSensor(1)) + "\n" + String.valueOf(leerSensor(2)) + "\n" + String.valueOf(leerSensor(3) + "\n");
-        sensores.setText(aux);
+        TextView sensor1 = (TextView) findViewById(R.id.nivelSensor1);
+        TextView sensor2 = (TextView) findViewById(R.id.nivelSensor2);
+        TextView sensor3 = (TextView) findViewById(R.id.nivelSensor3);
+
+        sensor1.setText(leerSensor(1));
+        sensor2.setText(leerSensor(2));
+        sensor3.setText(leerSensor(3));
 
         /*MODIFICAR */
 
@@ -39,11 +43,31 @@ public class MainActivity extends AppCompatActivity {
         /*MODIFICAR */
     }
 
-    public char[] leerSensor(int numSensor)
+    public String leerSensor(int numSensor)
     {
-        List<Sensor> sensor = RestApi.consultarWebServiceSensor(numSensor,0);
-        int i = sensor.size()-1;
-        return ((sensor.get(i).getSensor() + ": "+ sensor.get(i).getValue()).toCharArray());
+        List<Sensor> sensor = RestApi.consultarWebServiceSensor(numSensor,1);
+        String aux="";
+        if(numSensor == 1)
+        {
+            for(int i=0; i<6; i++) {
+                if(i%2 == 1)
+                    aux += "\t\t\t\t";
+                else
+                    aux += "\n";
+                aux += sensor.get(i).getSensor() + ": " + sensor.get(i).getValue();
+            }
+        }
+        else
+        {
+            for(int i=0; i<4; i++) {
+                if(i%2 == 1)
+                    aux += "\t\t\t\t";
+                else
+                    aux += "\n";
+                aux += sensor.get(i).getSensor() + ": " + sensor.get(i).getValue();
+            }
+        }
+        return aux+"\n";
     }
 
 
