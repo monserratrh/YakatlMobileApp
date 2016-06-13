@@ -11,68 +11,58 @@ package ipn.cic.ci.yakatl;
  */
 public class Sensor {
     
-    private String id_wasp;
     private String sensor;
-    private String value; 
-    private String timestamp;
+    private String fecha;
+    private String contaminante;
+    private String valor;
+    private String puntos_imeca;
+    private String calidad;
 
-    /**
-     * @return the id_wasp
-     */
-    public String getId_wasp() {
-        return id_wasp;
-    }
-
-    /**
-     * @param id_wasp the id_wasp to set
-     */
-    public void setId_wasp(String id_wasp) {
-        this.id_wasp = id_wasp;
-    }
-
-    /**
-     * @return the sensor
-     */
     public String getSensor() {
         return sensor;
     }
 
-    /**
-     * @param sensor the sensor to set
-     */
     public void setSensor(String sensor) {
         this.sensor = sensor;
     }
 
-    /**
-     * @return the value
-     */
-    public String getValue() {
-        return value;
+    public String getFecha() {
+        return fecha;
     }
 
-    /**
-     * @param value the value to set
-     */
-    public void setValue(String value) {
-        this.value = value;
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
     }
 
-    /**
-     * @return the timestamp
-     */
-    public String getTimestamp() {
-        return timestamp;
+    public String getContaminante() {
+        return contaminante;
     }
 
-    /**
-     * @param timestamp the timestamp to set
-     */
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
+    public void setContaminante(String contaminante) {
+        this.contaminante = contaminante;
     }
-    
-    
-    
-    
+
+    public String getValor() {
+        return valor;
+    }
+
+    public void setValor(String valor) {
+        this.valor = valor;
+    }
+
+    public String getPuntos_imeca() {
+        return puntos_imeca;
+    }
+
+    public void setPuntos_imeca(String puntos_imeca) {
+        this.puntos_imeca = puntos_imeca;
+    }
+
+    public String getCalidad() {
+        return calidad;
+    }
+
+    public void setCalidad(String calidad) {
+        this.calidad = calidad;
+    }
 }

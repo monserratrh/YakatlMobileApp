@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Yakatl</string>
     <string name="action_settings">Settings</string>
+
+    <string name="facebook_app_id">1389631104396942</string>
 </resources>

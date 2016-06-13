@@ -29,9 +29,9 @@ public class RestApi {
     
    /**
      * @param idSensor numero del sensor
-     * @param tipoOrdenamiento 1 si se desea ordenar del dato mas reciente al mas antiguo, 0 en otro caso
+     * @param idioma es para español y en para ingles
     */
-    public static List<Sensor> consultarWebServiceSensor(Integer idSensor, Integer tipoOrdenamiento){
+    public static List<Sensor> consultarWebServiceSensor(Integer idSensor, String idioma){
         
         List<Sensor> lSensor = new ArrayList<Sensor>();
     
@@ -42,7 +42,7 @@ public class RestApi {
 
              MediaType mediaType = MediaType.parse("application/octet-stream");
              Request request = new Request.Builder()
-                     .url("http://airmx.net/webservice/ObtenerDatos.php?numeroSensor=" + idSensor + "&ordenamiento=" + tipoOrdenamiento)
+                     .url("http://airmx.net/webservice/ObtenerDatosMovil.php?numeroSensor=" + idSensor + "&idioma=" + idioma)
                      .get()
                      .addHeader("cache-control", "no-cache")
                      .addHeader("postman-token", "b983b2f6-8cd7-5956-32f5-bc7cf4e53b9f")
@@ -60,10 +60,12 @@ public class RestApi {
 
                      JSONObject sensorApi = values.getJSONObject(i);
                      Sensor sensor = new Sensor();
-                     sensor.setId_wasp(sensorApi.getString("id_wasp"));
                      sensor.setSensor(sensorApi.getString("sensor"));
-                     sensor.setValue(sensorApi.getString("value"));
-                     sensor.setTimestamp(sensorApi.getString("timestamp"));
+                     sensor.setFecha(sensorApi.getString("fecha"));
+                     sensor.setContaminante(sensorApi.getString("contaminante"));
+                     sensor.setValor(sensorApi.getString("valor"));
+                     sensor.setPuntos_imeca(sensorApi.getString("puntos_imeca"));
+                     sensor.setCalidad(sensorApi.getString("calidad"));
 
                      lSensor.add(sensor);
                  }
@@ -71,12 +73,16 @@ public class RestApi {
 
              }
 
-         }catch (JSONException ex) {
+         }
+
+         catch (JSONException ex) {
              ex.printStackTrace();
         } catch (InterruptedException e) {
              e.printStackTrace();
          } catch (ExecutionException e) {
              e.printStackTrace();
+         }catch (Exception ex){
+             ex.printStackTrace();
          }
         return lSensor;
     }
