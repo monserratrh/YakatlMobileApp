@@ -4,6 +4,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +14,10 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,14 +29,28 @@ import com.facebook.appevents.AppEventsLogger;
 import com.facebook.share.Sharer;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  implements OnMapReadyCallback, AdapterView.OnItemSelectedListener {
 
     private TextView calidad;
+    private GoogleMap googleMap;
+    private LatLng currentLocation = null;
+    private static final int DEFAULT_ZOOM_LEVEL = 19;
+    private TextView sensor1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,19 +60,40 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
         consultarSensores();
+
+        currentLocation = new LatLng(19.503298, -99.147772);
+
+        Spinner spinner = (Spinner) findViewById(R.id.spCountries);
+        spinner.setOnItemSelectedListener(this);
+
 
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        this.googleMap = googleMap;
+
+        googleMap.addMarker(new MarkerOptions().position(new LatLng(19.503298, -99.147772)).title("Sensor 1"));
+        googleMap.addMarker(new MarkerOptions().position(new LatLng(19.503311, -99.147888)).title("Sensor 2"));
+        googleMap.addMarker(new MarkerOptions().position(new LatLng(19.503039, -99.147858)).title("Sensor 3"));
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(currentLocation)
+                .zoom(DEFAULT_ZOOM_LEVEL)
+                .build();
+        googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+    }
+
+
     public void consultarSensores() {
-        TextView sensor1 = (TextView) findViewById(R.id.nivelSensor1);
-        TextView sensor2 = (TextView) findViewById(R.id.nivelSensor2);
-        TextView sensor3 = (TextView) findViewById(R.id.nivelSensor3);
+        sensor1 = (TextView) findViewById(R.id.nivelSensor1);
         calidad = (TextView)findViewById(R.id.calidad);
 
         sensor1.setText(leerSensor(1));
-        sensor2.setText(leerSensor(2));
-        sensor3.setText(leerSensor(3));
 
         /*MODIFICAR */
 
@@ -65,13 +106,34 @@ public class MainActivity extends AppCompatActivity {
         String aux = "";
         List<Sensor> lSensores = RestApi.consultarWebServiceSensor(numSensor,"es");
 
+        boolean cambio = false;
         String calidadGlobal = "BUENA";
 
         for(Sensor sensor:lSensores){
-            aux += "\n"+sensor.getContaminante()+": "+sensor.getValor()+ (sensor.getContaminante().equals("TCA") ? "° C":  " calidad " + sensor.getCalidad());
-            if( sensor.getCalidad() != null && !(sensor.getCalidad().equals("BUENA") || sensor.getCalidad().equals("GOOD"))){
-                calidadGlobal = sensor.getCalidad();
+            if(sensor.getContaminante().equals("TCA")){
+                calidadGlobal += " " +sensor.getValor()+ "ºC";
             }
+            else{
+
+                if(!sensor.getCalidad().equals("BUENA") && cambio == false){
+                    calidadGlobal = sensor.getCalidad();
+                    cambio = true;
+                }
+
+                aux += "\n"+sensor.getContaminante()+": "+sensor.getValor()+" IMECAS";
+            }
+
+
+        }
+
+        if(cambio == false){
+            Bitmap bMap1 = BitmapFactory.decodeResource(getResources(), R.drawable.estudia);
+            Bitmap bMap2 = BitmapFactory.decodeResource(getResources(), R.drawable.trabaja);
+            ((ImageView) findViewById(R.id.actividades1)).setImageBitmap(bMap1);
+            ((ImageView) findViewById(R.id.actividades2)).setImageBitmap(bMap2);
+
+            ((TextView) findViewById(R.id.estudio)).setText("EL clima es perfecto para estudiar");
+            ((TextView) findViewById(R.id.trabajo)).setText("El aire tiene la calidad optima para trabajar");
         }
 
         calidad.setText("\nLa calidad del aire es: \n"+calidadGlobal);
@@ -108,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
         ShareLinkContent content = new ShareLinkContent.Builder()
                 .setContentUrl(Uri.parse("http://airmx.net"))
                 .setContentTitle("La calidad del aire por Yakatl")
-                .setContentDescription(calidad.getText().toString())
+                .setContentDescription(calidad.getText().toString() +" \n"+sensor1.getText().toString())
                 .setImageUrl(Uri.parse("http://airmx.net/img/profile.png"))
                 .build();
 
@@ -139,5 +201,37 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        TextView sensor1 = (TextView) findViewById(R.id.nivelSensor1);
+        calidad = (TextView)findViewById(R.id.calidad);
 
+        sensor1.setText(leerSensor(position+1));
+
+        LatLng location = null;
+
+        switch (position+1){
+            case 1:
+                location = new LatLng(19.503298, -99.147772);
+                break;
+            case 2:
+                location = new LatLng(19.503311, -99.147888);
+                break;
+            case 3:
+                location = new LatLng(19.503039, -99.147858);
+                break;
+        }
+
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(location)
+                .zoom(DEFAULT_ZOOM_LEVEL)
+                .build();
+        googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 }
