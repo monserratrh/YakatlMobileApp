@@ -3,4 +3,10 @@
     <string name="action_settings">Settings</string>
 
     <string name="facebook_app_id">1389631104396942</string>
+    <string name="country_prompt">Seleccione un sensor</string>
+    <array name="country_arrays">
+        <item>Sensor 1</item>
+        <item>Sensor 2</item>
+        <item>Sensor 3</item>
+    </array>
 </resources>
