@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity  implements OnMapReadyCallba
     private TextView calidad;
     private GoogleMap googleMap;
     private LatLng currentLocation = null;
-    private static final int DEFAULT_ZOOM_LEVEL = 19;
+    private static final int DEFAULT_ZOOM_LEVEL = 17;
     private TextView sensor1;
 
     @Override
@@ -100,15 +100,14 @@ public class MainActivity extends AppCompatActivity  implements OnMapReadyCallba
         this.googleMap = googleMap;
         googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(19.503298, -99.147772)).title("Sensor 1"));
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(19.503311, -99.147888)).title("Sensor 2"));
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(19.503039, -99.147858)).title("Sensor 3"));
+        googleMap.addMarker(new MarkerOptions().position(new LatLng(19.50305715, -99.14784282)).title("Sensor 1"));
+        googleMap.addMarker(new MarkerOptions().position(new LatLng(19.50311277, -99.147816)).title("Sensor 2"));
+        googleMap.addMarker(new MarkerOptions().position(new LatLng(19.50327459, -99.14803058)).title("Sensor 3"));
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(currentLocation)
                 .zoom(DEFAULT_ZOOM_LEVEL)
                 .build();
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
     }
 
 
@@ -127,13 +126,11 @@ public class MainActivity extends AppCompatActivity  implements OnMapReadyCallba
 
         boolean cambio = false;
         String calidadGlobal = "BUENA";
-
         String calidadG = "BUENA";
-
+        int c = 1;
         for(Sensor sensor:lSensores){
             if(sensor.getContaminante().equals("TCA")){
                 calidadGlobal += " " +sensor.getValor()+ "ºC";
-
             }
             else{
 
@@ -142,11 +139,16 @@ public class MainActivity extends AppCompatActivity  implements OnMapReadyCallba
                     cambio = true;
                     calidadG = sensor.getCalidad();
                 }
-
-                aux += "\n"+sensor.getContaminante()+": "+sensor.getValor()+ ( sensor.getContaminante().equals("CO2") ? " ppm":" IMECAS");
+                aux += sensor.getContaminante()+": "+sensor.getValor()+ ( sensor.getContaminante().equals("CO2") ? " ppm":" IMECAS") ;
+                if(c == 1)
+                {
+                    c = 0;
+                }
+                else
+                {
+                    aux += "\n";
+                }
             }
-
-
         }
 
 
@@ -172,22 +174,29 @@ public class MainActivity extends AppCompatActivity  implements OnMapReadyCallba
                 ((ImageView) findViewById(R.id.actividades1)).setImageBitmap(bMap1);
                 ((ImageView) findViewById(R.id.actividades2)).setImageBitmap(bMap2);
 
-                ((TextView) findViewById(R.id.estudio)).setText("EL clima es perfecto para estudiar");
+                ((TextView) findViewById(R.id.estudio)).setText("El clima es perfecto para estudiar");
                 ((TextView) findViewById(R.id.trabajo)).setText("El aire tiene la calidad optima para trabajar");
                 break;
             case "regular":
-                bMap1 = BitmapFactory.decodeResource(getResources(), R.drawable.estudia);
-                bMap2 = BitmapFactory.decodeResource(getResources(), R.drawable.trabaja);
+                bMap1 = BitmapFactory.decodeResource(getResources(), R.drawable.estudiar_regular);
+                bMap2 = BitmapFactory.decodeResource(getResources(), R.drawable.trabajar_regular);
                 ((ImageView) findViewById(R.id.actividades1)).setImageBitmap(bMap1);
                 ((ImageView) findViewById(R.id.actividades2)).setImageBitmap(bMap2);
 
-                ((TextView) findViewById(R.id.estudio)).setText("EL clima es perfecto para estudiar pero toma tus precauciones");
-                ((TextView) findViewById(R.id.trabajo)).setText("El aire tiene la calidad optima para trabajar pero no te excedas");
+                ((TextView) findViewById(R.id.estudio)).setText("El clima es bueno para estudiar pero toma tus precauciones");
+                ((TextView) findViewById(R.id.trabajo)).setText("El aire tiene la buena calidad para trabajar pero no te excedas");
+                break;
+            case "mala":
+                bMap1 = BitmapFactory.decodeResource(getResources(), R.drawable.estudiar_mala);
+                bMap2 = BitmapFactory.decodeResource(getResources(), R.drawable.trabajar_mala);
+                ((ImageView) findViewById(R.id.actividades1)).setImageBitmap(bMap1);
+                ((ImageView) findViewById(R.id.actividades2)).setImageBitmap(bMap2);
+
+                ((TextView) findViewById(R.id.estudio)).setText("EL clima es malo para estudiar");
+                ((TextView) findViewById(R.id.trabajo)).setText("La calidad del aire es mala para trabajar, ve a otro lugar");
                 break;
         }
-        calidad.setText("\nLa calidad del aire es: \n"+calidadGlobal);
-
-
+        calidad.setText("La calidad del aire es: \n" + calidadGlobal);
         return aux;
     }
 
@@ -261,15 +270,17 @@ public class MainActivity extends AppCompatActivity  implements OnMapReadyCallba
 
         switch (position+1){
             case 1:
-                location = new LatLng(19.503298, -99.147772);
+                location = new LatLng(19.50305715, -99.14784282);
                 break;
             case 2:
-                location = new LatLng(19.503311, -99.147888);
+                location = new LatLng(19.50311277, -99.147816);
                 break;
             case 3:
-                location = new LatLng(19.503039, -99.147858);
+                location = new LatLng(19.50327459, -99.14803058);
                 break;
         }
+
+
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(location)
