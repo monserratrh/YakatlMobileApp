@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity  implements OnMapReadyCallba
         spinner.setOnItemSelectedListener(this);
 
         Sensor sensor = RestApi.consultarWebServicePrediccion(1);
-        prediccionText.setText("La prediccion para mañana es de :" +sensor.getContaminante()+ ": "+sensor.getValor()+" IMECAS "+sensor.getCalidad());
+        prediccionText.setText("La prediccion para mañana es de :" +sensor.getContaminante()+ ": "+sensor.getPuntos_imeca()+" IMECAS "+sensor.getCalidad());
 
 
 

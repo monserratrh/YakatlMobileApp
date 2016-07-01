@@ -117,7 +117,6 @@ public class RestApi {
 
                     JSONObject sensorApi = values.getJSONObject(0);
                     sensor.setContaminante(sensorApi.getString("contaminante"));
-                    sensor.setValor(sensorApi.getString("valor"));
                     sensor.setPuntos_imeca(sensorApi.getString("imecas"));
                     sensor.setCalidad(sensorApi.getString("calidad"));
 
