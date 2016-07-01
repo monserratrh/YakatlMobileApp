@@ -89,14 +89,11 @@ public class MainActivity extends AppCompatActivity  implements OnMapReadyCallba
 
         currentLocation = new LatLng(19.503298, -99.147772);
 
-        Spinner spinner = (Spinner) findViewById(R.id.spCountries);
+        Spinner spinner = (Spinner) findViewById(R.id.spSensor);
         spinner.setOnItemSelectedListener(this);
 
         Sensor sensor = RestApi.consultarWebServicePrediccion(1);
-        prediccionText.setText("La prediccion para mañana es de :" +sensor.getContaminante()+ ": "+sensor.getPuntos_imeca()+" IMECAS "+sensor.getCalidad());
-
-
-
+        prediccionText.setText("La calidad del aire mañana será:" + "\n" + sensor.getCalidad() + "\n" + sensor.getContaminante() + ": " + sensor.getPuntos_imeca() + " IMECAS ");
     }
 
     @Override
@@ -118,12 +115,8 @@ public class MainActivity extends AppCompatActivity  implements OnMapReadyCallba
     public void consultarSensores() {
         sensor1 = (TextView) findViewById(R.id.nivelSensor1);
         calidad = (TextView)findViewById(R.id.calidad);
-
         sensor1.setText(leerSensor(1));
-
-         prediccionText = (TextView) findViewById(R.id.prediccionText);
-
-
+        prediccionText = (TextView) findViewById(R.id.prediccionText);
     }
 
 
@@ -147,7 +140,6 @@ public class MainActivity extends AppCompatActivity  implements OnMapReadyCallba
                     cambio = true;
                     calidadG = sensor.getCalidad();
                 }
-                aux += sensor.getContaminante()+": "+sensor.getValor()+ ( sensor.getContaminante().equals("CO2") ? " ppm":" IMECAS") ;
                 if(c == 1)
                 {
                     c = 0;
@@ -156,6 +148,8 @@ public class MainActivity extends AppCompatActivity  implements OnMapReadyCallba
                 {
                     aux += "\n";
                 }
+                aux += sensor.getContaminante()+": "+sensor.getValor()+ ( sensor.getContaminante().equals("CO2") ? " ppm":" IMECAS") ;
+
             }
         }
 
@@ -276,7 +270,7 @@ public class MainActivity extends AppCompatActivity  implements OnMapReadyCallba
         sensor1.setText(leerSensor(position+1));
 
         Sensor sensor = RestApi.consultarWebServicePrediccion(position+1);
-        prediccionText.setText("La prediccion para mañana es de :" +sensor.getContaminante()+ ": "+sensor.getValor()+" IMECAS "+sensor.getCalidad());
+        prediccionText.setText("La calidad del aire mañana será:" + "\n" + sensor.getCalidad() + "\n" + sensor.getContaminante() + ": " + sensor.getPuntos_imeca() + " IMECAS ");
 
         LatLng location = null;
 
@@ -291,15 +285,11 @@ public class MainActivity extends AppCompatActivity  implements OnMapReadyCallba
                 location = new LatLng(19.50327459, -99.14803058);
                 break;
         }
-
-
-
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(location)
                 .zoom(DEFAULT_ZOOM_LEVEL)
                 .build();
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
     }
 
     @Override

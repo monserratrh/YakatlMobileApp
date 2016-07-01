@@ -70,7 +70,6 @@ public class RestApi {
                      lSensor.add(sensor);
                  }
 
-
              }
 
          }
@@ -113,13 +112,10 @@ public class RestApi {
 
             if (estatus == 1) { // exito
                 JSONArray values = jsonObject.getJSONArray("retorno");
-
-
                     JSONObject sensorApi = values.getJSONObject(0);
                     sensor.setContaminante(sensorApi.getString("contaminante"));
                     sensor.setPuntos_imeca(sensorApi.getString("imecas"));
                     sensor.setCalidad(sensorApi.getString("calidad"));
-
             }
 
         }
