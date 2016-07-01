@@ -87,6 +87,53 @@ public class RestApi {
         return lSensor;
     }
 
+
+    public static Sensor consultarWebServicePrediccion(Integer numeroSensor){
+
+
+        Sensor sensor = new Sensor();
+
+        try {
+            // TODO code application logic here
+
+            OkHttpClient client = new OkHttpClient();
+
+            MediaType mediaType = MediaType.parse("application/octet-stream");
+            Request request = new Request.Builder()
+                    .url("http://airmx.net/webservice/obtener_prediccion.php?sensor="+numeroSensor)
+                    .get()
+                    .addHeader("cache-control", "no-cache")
+                    .addHeader("postman-token", "b983b2f6-8cd7-5956-32f5-bc7cf4e53b9f")
+                    .build();
+
+
+            JSONObject jsonObject = new RequestApi().execute(request).get();
+
+            Integer estatus = jsonObject.getInt("estado");
+
+            if (estatus == 1) { // exito
+
+                    sensor.setContaminante(jsonObject.getString("contaminante"));
+                    sensor.setValor(jsonObject.getString("valor"));
+                    sensor.setPuntos_imeca(jsonObject.getString("imecas"));
+                    sensor.setCalidad(jsonObject.getString("calidad"));
+
+            }
+
+        }
+
+        catch (JSONException ex) {
+            ex.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return sensor;
+    }
+
     private static class RequestApi extends AsyncTask<Request, Void, JSONObject> {
         @Override
         protected JSONObject doInBackground(Request... params) {
