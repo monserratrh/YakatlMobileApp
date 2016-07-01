@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity  implements OnMapReadyCallba
     private LatLng currentLocation = null;
     private static final int DEFAULT_ZOOM_LEVEL = 17;
     private TextView sensor1;
-
+    TextView prediccionText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +92,10 @@ public class MainActivity extends AppCompatActivity  implements OnMapReadyCallba
         Spinner spinner = (Spinner) findViewById(R.id.spCountries);
         spinner.setOnItemSelectedListener(this);
 
+        Sensor sensor = RestApi.consultarWebServicePrediccion(1);
+        prediccionText.setText("La prediccion para mañana es de :" +sensor.getContaminante()+ ": "+sensor.getValor()+" IMECAS "+sensor.getCalidad());
+
+
 
     }
 
@@ -116,6 +120,10 @@ public class MainActivity extends AppCompatActivity  implements OnMapReadyCallba
         calidad = (TextView)findViewById(R.id.calidad);
 
         sensor1.setText(leerSensor(1));
+
+         prediccionText = (TextView) findViewById(R.id.prediccionText);
+
+
     }
 
 
@@ -212,6 +220,7 @@ public class MainActivity extends AppCompatActivity  implements OnMapReadyCallba
         switch (item.getItemId()) {
             case R.id.action_refresh:
                 consultarSensores();
+
                 return true;
             case R.id.action_share_fb:
                 compartirFb();
@@ -265,6 +274,9 @@ public class MainActivity extends AppCompatActivity  implements OnMapReadyCallba
         calidad = (TextView)findViewById(R.id.calidad);
 
         sensor1.setText(leerSensor(position+1));
+
+        Sensor sensor = RestApi.consultarWebServicePrediccion(position+1);
+        prediccionText.setText("La prediccion para mañana es de :" +sensor.getContaminante()+ ": "+sensor.getValor()+" IMECAS "+sensor.getCalidad());
 
         LatLng location = null;
 

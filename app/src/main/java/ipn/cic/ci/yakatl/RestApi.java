@@ -112,11 +112,14 @@ public class RestApi {
             Integer estatus = jsonObject.getInt("estado");
 
             if (estatus == 1) { // exito
+                JSONArray values = jsonObject.getJSONArray("retorno");
 
-                    sensor.setContaminante(jsonObject.getString("contaminante"));
-                    sensor.setValor(jsonObject.getString("valor"));
-                    sensor.setPuntos_imeca(jsonObject.getString("imecas"));
-                    sensor.setCalidad(jsonObject.getString("calidad"));
+
+                    JSONObject sensorApi = values.getJSONObject(0);
+                    sensor.setContaminante(sensorApi.getString("contaminante"));
+                    sensor.setValor(sensorApi.getString("valor"));
+                    sensor.setPuntos_imeca(sensorApi.getString("imecas"));
+                    sensor.setCalidad(sensorApi.getString("calidad"));
 
             }
 
